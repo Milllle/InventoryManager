@@ -1,0 +1,210 @@
+﻿/* =============== Allmänt =============== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f4;
+}
+
+/* =============== Toppmeny =============== */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #343a40;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .topbar h5 {
+        margin: 0;
+    }
+
+    .topbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        margin-left: 1rem;
+    }
+
+        .topbar a.active {
+            text-decoration: underline;
+        }
+
+/* =============== Layoutstruktur =============== */
+.page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #212529;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+    .sidebar img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+/* =============== Innehåll =============== */
+main {
+    flex-grow: 1;
+    padding: 2rem;
+    background-color: white;
+}
+
+/* =============== Rubriker =============== */
+h3, h4 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+/* =============== Tabeller =============== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+    table th,
+    table td {
+        padding: 0.75rem;
+        text-align: left;
+        border: 1px solid #ccc;
+    }
+
+    table th {
+        background-color: #f0f0f0;
+    }
+
+/* =============== Formulär =============== */
+input.form-control,
+select.form-control,
+textarea.form-control {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+    button.btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+button.btn-danger {
+    background-color: #dc3545;
+}
+
+button.btn-secondary {
+    background-color: #6c757d;
+}
+
+/* =============== Ikoner & knappar =============== */
+button i {
+    pointer-events: none;
+}
+
+/* =============== Responsiv =============== */
+@media (max-width: 768px) {
+    .page {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    main {
+        padding: 1rem;
+    }
+    /* =============== Mobilanpassning =============== */
+    @media (max-width: 768px) {
+        .page {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            flex-direction: row;
+            justify-content: center;
+            padding: 0.5rem;
+        }
+
+            .sidebar img {
+                max-width: 60px;
+                height: auto;
+                border-radius: 50%;
+                margin: 0.5rem;
+            }
+
+        .topbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+            .topbar div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+        table, thead, tbody, th, td, tr {
+            display: block;
+            width: 100%;
+        }
+
+            table thead {
+                display: none;
+            }
+
+            table tr {
+                margin-bottom: 1rem;
+                border: 1px solid #ccc;
+                padding: 0.5rem;
+                background-color: #fff;
+            }
+
+            table td {
+                padding: 0.5rem;
+                text-align: right;
+                position: relative;
+            }
+
+                table td::before {
+                    content: attr(data-label);
+                    position: absolute;
+                    left: 0.5rem;
+                    text-align: left;
+                    font-weight: bold;
+                    color: #555;
+                }
+    }
+}

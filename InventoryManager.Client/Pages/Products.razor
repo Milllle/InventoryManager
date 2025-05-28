@@ -1,0 +1,133 @@
+﻿@page "/products"
+@using InventoryManager.Client.Models
+@using InventoryManager.Client.Services
+@inject ProductService ProductService
+
+<h3>📦 Alla produkter</h3>
+
+@if (products is null)
+{
+    <p>Laddar...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Namn</th>
+                <th>Antal</th>
+                <th>Plats</th>
+                <th>Påfyllningsgräns</th>
+                <th>Åtgärder</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in products)
+            {
+                <tr>
+                    <td data-label="Namn">@p.Name</td>
+                    <td data-label="Antal">@p.Quantity</td>
+                    <td data-label="Plats">@p.Location</td>
+                    <td data-label="Påfyllningsgräns">@p.ReorderLevel</td>
+
+                    <td>
+                        <button class="btn btn-sm btn-secondary me-2" @onclick="() => EditProduct(p)">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteProduct(p.Id)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<hr />
+
+<h4>@(isEditing ? "✏️ Redigera produkt" : "➕ Lägg till ny produkt")</h4>
+
+<EditForm Model="@newProduct" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-2">
+        <label>Namn:</label>
+        <InputText @bind-Value="newProduct.Name" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Beskrivning:</label>
+        <InputText @bind-Value="newProduct.Description" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Antal i lager:</label>
+        <InputNumber @bind-Value="newProduct.Quantity" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Plats:</label>
+        <InputText @bind-Value="newProduct.Location" class="form-control" />
+    </div>
+
+    <div class="mb-2">
+        <label>Påfyllningsgräns:</label>
+        <InputNumber @bind-Value="newProduct.ReorderLevel" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        @(isEditing ? "Uppdatera produkt" : "Skapa produkt")
+    </button>
+</EditForm>
+
+@code {
+    List<Product>? products;
+    Product newProduct = new Product();
+    bool isEditing = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetAllAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (isEditing)
+        {
+            await ProductService.UpdateAsync(newProduct);
+            isEditing = false;
+        }
+        else
+        {
+            await ProductService.CreateAsync(newProduct);
+        }
+
+        newProduct = new Product();
+        products = await ProductService.GetAllAsync();
+    }
+
+    private void EditProduct(Product product)
+    {
+        newProduct = new Product
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Description = product.Description,
+            Quantity = product.Quantity,
+            Location = product.Location,
+            ReorderLevel = product.ReorderLevel,
+            CreatedAt = product.CreatedAt,
+            UpdatedAt = DateTime.Now
+        };
+
+        isEditing = true;
+    }
+
+    private async Task DeleteProduct(Guid id)
+    {
+        await ProductService.DeleteAsync(id);
+        products = await ProductService.GetAllAsync();
+    }
+}
